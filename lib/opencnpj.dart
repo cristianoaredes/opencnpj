@@ -1,8 +1,3 @@
-/// Support for doing something awesome.
-///
-/// More dartdocs go here.
-library;
-
-export 'src/opencnpj_base.dart';
-
-// TODO: Export any libraries intended for clients of this package.
+export 'package:opencnpj/src/client.dart';
+export 'package:opencnpj/src/exceptions/exceptions.dart';
+export 'package:opencnpj/src/models/company.dart';

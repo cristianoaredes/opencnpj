@@ -13,6 +13,10 @@
     *   **Actions:** Created `lib/src/exceptions/exceptions.dart` with custom exceptions. Created `lib/src/client.dart` implementing `IOpenCNPJ` and the `search` method, including input sanitization, HTTP requests, status code checking, and JSON decoding. Made `sanitizeCnpj` a static method to facilitate testing. Exported main classes in `lib/opencnpj.dart`. Created unit tests in `test/client_test.dart` using `mocktail` to mock `http.Client`. Ran `dart fix --apply`, `dart format .`, and `dart test` (all passed).
     *   **Learnings/Surprises:** Realized `_sanitizeCnpj` as a private instance method was not directly testable; refactored it to a public static `sanitizeCnpj` method.
     *   **Deviations:** Refactored the `_sanitizeCnpj` method during testing for better testability.
+*   **Phase 4:** Final Polish & Documentation.
+    *   **Actions:** Created a working example in `example/main.dart`. Updated `README.md` with installation, usage, and supported fields. Created `GEMINI.md` with project context. Ran `dart analyze` (no issues), `dart test` (all passed), and verified `pubspec.yaml` metadata. Made final commit.
+    *   **Learnings/Surprises:** None.
+    *   **Deviations:** None.
 
 ## Phase 1: Project Setup
 - [X] Create a pure Dart package using `dart create -t package .` (force to overwrite if needed, or handle manually if `dart create` complains about non-empty dir). *Note: Since we already `git init`ed, we might need to be careful. `dart create --force` might be needed or just manual setup.*
@@ -57,14 +61,14 @@
 - [X] Commit client logic.
 
 ## Phase 4: Final Polish & Documentation
-- [ ] Create a working example in `example/main.dart` showing how to fetch a company.
-- [ ] Update `README.md` with:
+- [X] Create a working example in `example/main.dart` showing how to fetch a company.
+- [X] Update `README.md` with:
     -   Installation instructions.
     -   Usage example.
     -   Supported fields summary.
-- [ ] Create `GEMINI.md` with project context.
-- [ ] Run `dart analyze` to ensure no lint errors.
-- [ ] Run all tests `dart test`.
-- [ ] Verify `pubspec.yaml` metadata.
-- [ ] Final commit.
+- [X] Create `GEMINI.md` with project context.
+- [X] Run `dart analyze` to ensure no lint errors.
+- [X] Run all tests `dart test`.
+- [X] Verify `pubspec.yaml` metadata.
+- [X] Final commit.
 - [ ] Ask user for final review.

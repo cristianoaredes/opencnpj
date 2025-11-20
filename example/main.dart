@@ -1,4 +1,3 @@
-
 import 'package:opencnpj/opencnpj.dart';
 
 void main() async {
@@ -17,7 +16,9 @@ void main() async {
       print('Email: ${company.email}');
     }
     if (company.telefones.isNotEmpty) {
-      print('Phone: (${company.telefones.first.ddd}) ${company.telefones.first.numero}');
+      print(
+        'Phone: (${company.telefones.first.ddd}) ${company.telefones.first.numero}',
+      );
     }
     if (company.qsa.isNotEmpty) {
       print('Partners: ');

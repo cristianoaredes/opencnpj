@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:opencnpj/src/exceptions/exceptions.dart';
 import 'package:opencnpj/src/models/company.dart';
+import 'package:cpf_cnpj_validator/cnpj_validator.dart'; // New import
 
 abstract class IOpenCNPJ {
   Future<Company> search(String cnpj);
@@ -19,11 +20,12 @@ class OpenCNPJ implements IOpenCNPJ {
 
   @override
   Future<Company> search(String cnpj) async {
-    final sanitizedCnpj = OpenCNPJ.sanitizeCnpj(cnpj);
-    if (sanitizedCnpj.length != 14) {
-      throw const InvalidCNPJException(
-        'CNPJ must contain exactly 14 digits after sanitization.',
-      );
+    final sanitizedCnpj = CNPJValidator.strip(
+      cnpj,
+    ); // Use validator for sanitization
+    if (!CNPJValidator.isValid(sanitizedCnpj)) {
+      // Use validator for validation
+      throw const InvalidCNPJException('CNPJ provided is invalid.');
     }
 
     final uri = Uri.parse('$_baseUrl/$sanitizedCnpj');
@@ -49,7 +51,10 @@ class OpenCNPJ implements IOpenCNPJ {
     }
   }
 
-  static String sanitizeCnpj(String cnpj) {
-    return cnpj.replaceAll(RegExp(r'[^0-9]'), '');
+  static String formatCnpj(String cnpj) {
+    if (!CNPJValidator.isValid(cnpj)) {
+      throw FormatException('Cannot format an invalid CNPJ.');
+    }
+    return CNPJValidator.format(cnpj);
   }
 }

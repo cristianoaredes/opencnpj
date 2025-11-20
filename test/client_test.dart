@@ -3,6 +3,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:http/http.dart' as http;
 import 'package:opencnpj/opencnpj.dart';
 import 'package:test/test.dart';
+// New import for tests
 
 class MockClient extends Mock implements http.Client {}
 
@@ -50,24 +51,37 @@ void main() {
       expect(company.razaoSocial, 'GOOGLE BRASIL INTERNET LTDA.');
     });
 
-    test('search throws InvalidCNPJException for non-14 digit CNPJ', () async {
+    test('search throws InvalidCNPJException for invalid CNPJ', () async {
+      // Using an invalid CNPJ that CNPJValidator would fail
       expect(
-        () => openCnpj.search('123'),
+        () => openCnpj.search('12345678000199'),
         throwsA(isA<InvalidCNPJException>()),
       );
+    });
+
+    test('formatCnpj returns a formatted CNPJ for valid input', () {
+      final unformattedCnpj = '12175094000119';
+      final formattedCnpj = OpenCNPJ.formatCnpj(unformattedCnpj);
+      expect(formattedCnpj, '12.175.094/0001-19');
+    });
+
+    test('formatCnpj throws FormatException for invalid CNPJ', () {
+      expect(() => OpenCNPJ.formatCnpj('123'), throwsA(isA<FormatException>()));
       expect(
-        () => openCnpj.search('1234567890123456'),
-        throwsA(isA<InvalidCNPJException>()),
+        () => OpenCNPJ.formatCnpj('12345678000199'), // Invalid digits
+        throwsA(isA<FormatException>()),
       );
     });
 
     test('search throws NotFoundException on 404 response', () async {
       when(
-        () => mockClient.get(any()),
+        () => mockClient.get(
+          Uri.parse('https://api.opencnpj.org/12175094000119'),
+        ),
       ).thenAnswer((_) async => http.Response('Not Found', 404));
 
       expect(
-        () => openCnpj.search('00000000000000'),
+        () => openCnpj.search('12.175.094/0001-19'),
         throwsA(isA<NotFoundException>()),
       );
     });
@@ -92,14 +106,6 @@ void main() {
         () => openCnpj.search('06990590000123'),
         throwsA(isA<OpenCNPJException>()),
       );
-    });
-
-    test('sanitizeCnpj removes non-numeric characters', () {
-      final sanitized = OpenCNPJ.sanitizeCnpj('06.990.590/0001-23');
-      expect(sanitized, '06990590000123');
-
-      final sanitized2 = OpenCNPJ.sanitizeCnpj('123-abc-456');
-      expect(sanitized2, '123456');
     });
   });
 }

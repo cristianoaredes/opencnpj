@@ -16,6 +16,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Exemplo de Cadastro OpenCNPJ',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(
@@ -124,10 +125,10 @@ class _RegisterPageState extends State<RegisterPage> {
     _nameController.text = company.razaoSocial;
     _tradeNameController.text = company.nomeFantasia ?? '';
     _emailController.text = company.email ?? '';
-    
+
     if (company.telefones.isNotEmpty) {
-       final phone = company.telefones.first;
-       _phoneController.text = '(${phone.ddd}) ${phone.numero}';
+      final phone = company.telefones.first;
+      _phoneController.text = '(${phone.ddd}) ${phone.numero}';
     }
 
     _streetController.text = company.logradouro;
@@ -160,44 +161,53 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5FA),
-      body: Center(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 800),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const _Header(),
-                const Gap(32),
-                if (_errorMessage != null) ...[
-                  _ErrorBanner(message: _errorMessage!),
-                  const Gap(24),
-                ],
-                _RegistrationForm(
-                  formKey: _formKey,
-                  cnpjController: _cnpjController,
-                  cnpjFormatter: _cnpjFormatter,
-                  nameController: _nameController,
-                  tradeNameController: _tradeNameController,
-                  emailController: _emailController,
-                  phoneController: _phoneController,
-                  streetController: _streetController,
-                  numberController: _numberController,
-                  complementController: _complementController,
-                  districtController: _districtController,
-                  cityController: _cityController,
-                  stateController: _stateController,
-                  zipController: _zipController,
-                  isLoading: _isLoading,
-                  onSearch: _searchCnpj,
+      body: SafeArea(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final isMobile = constraints.maxWidth < 600;
+            final padding = isMobile ? 16.0 : 24.0;
+
+            return Center(
+              child: SingleChildScrollView(
+                padding: EdgeInsets.all(padding),
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 800),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const _Header(),
+                      Gap(isMobile ? 24 : 32),
+                      if (_errorMessage != null) ...[
+                        _ErrorBanner(message: _errorMessage!),
+                        Gap(isMobile ? 16 : 24),
+                      ],
+                      _RegistrationForm(
+                        formKey: _formKey,
+                        cnpjController: _cnpjController,
+                        cnpjFormatter: _cnpjFormatter,
+                        nameController: _nameController,
+                        tradeNameController: _tradeNameController,
+                        emailController: _emailController,
+                        phoneController: _phoneController,
+                        streetController: _streetController,
+                        numberController: _numberController,
+                        complementController: _complementController,
+                        districtController: _districtController,
+                        cityController: _cityController,
+                        stateController: _stateController,
+                        zipController: _zipController,
+                        isLoading: _isLoading,
+                        onSearch: _searchCnpj,
+                      ),
+                    ]
+                        .animate(interval: 50.ms)
+                        .fadeIn(duration: 400.ms)
+                        .slideY(begin: 0.1, end: 0, duration: 400.ms),
+                  ),
                 ),
-              ]
-                  .animate(interval: 50.ms)
-                  .fadeIn(duration: 400.ms)
-                  .slideY(begin: 0.1, end: 0, duration: 400.ms),
-            ),
-          ),
+              ),
+            );
+          },
         ),
       ),
     );
@@ -224,6 +234,7 @@ class _Header extends StatelessWidget {
           'Insira os dados da sua empresa abaixo. Use a busca por CNPJ para preenchimento automático.',
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                 color: Colors.grey[600],
+                height: 1.5,
               ),
         ),
       ],
@@ -260,6 +271,50 @@ class _ErrorBanner extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class ResponsiveRow extends StatelessWidget {
+  final List<Widget> children;
+  final double gap;
+  final CrossAxisAlignment crossAxisAlignment;
+
+  const ResponsiveRow({
+    super.key,
+    required this.children,
+    this.gap = 16,
+    this.crossAxisAlignment = CrossAxisAlignment.start,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        if (constraints.maxWidth < 600) {
+          // Mobile: Column
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              for (int i = 0; i < children.length; i++) ...[
+                if (i > 0) Gap(gap),
+                children[i],
+              ]
+            ],
+          );
+        } else {
+          // Tablet/Desktop: Row
+          return Row(
+            crossAxisAlignment: crossAxisAlignment,
+            children: [
+              for (int i = 0; i < children.length; i++) ...[
+                if (i > 0) Gap(gap),
+                Expanded(child: children[i]),
+              ]
+            ],
+          );
+        }
+      },
     );
   }
 }
@@ -303,100 +358,139 @@ class _RegistrationForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: formKey,
-      child: Container(
-        padding: const EdgeInsets.all(32),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(24),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              blurRadius: 20,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _SectionLabel('Identificação da Empresa'),
-            const Gap(16),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: TextFormField(
-                    controller: cnpjController,
-                    inputFormatters: [cnpjFormatter],
-                    decoration: const InputDecoration(
-                      labelText: 'CNPJ',
-                      hintText: '00.000.000/0000-00',
-                      prefixIcon: Icon(Icons.business),
-                    ),
-                    keyboardType: TextInputType.number,
-                  ),
-                ),
-                const Gap(16),
-                SizedBox(
-                  height: 56,
-                  child: ElevatedButton.icon(
-                    onPressed: isLoading ? null : onSearch,
-                    icon: isLoading
-                        ? const SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              color: Colors.white,
-                            ),
-                          )
-                        : const Icon(Icons.search),
-                    label: Text(isLoading ? 'Buscando...' : 'Buscar'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(context).primaryColor,
-                      foregroundColor: Colors.white,
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      padding: const EdgeInsets.symmetric(horizontal: 24),
-                    ),
-                  ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isMobile = constraints.maxWidth < 600;
+        final cardPadding = isMobile ? 20.0 : 32.0;
+
+        return Form(
+          key: formKey,
+          child: Container(
+            padding: EdgeInsets.all(cardPadding),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(24),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 20,
+                  offset: const Offset(0, 4),
                 ),
               ],
             ),
-            const Gap(16),
-            Row(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  child: TextFormField(
+                _SectionLabel('Identificação da Empresa'),
+                const Gap(16),
+                
+                // Special layout for CNPJ + Search
+                if (isMobile) ...[
+                   TextFormField(
+                      controller: cnpjController,
+                      inputFormatters: [cnpjFormatter],
+                      decoration: const InputDecoration(
+                        labelText: 'CNPJ',
+                        hintText: '00.000.000/0000-00',
+                        prefixIcon: Icon(Icons.business),
+                      ),
+                      keyboardType: TextInputType.number,
+                    ),
+                    const Gap(12),
+                    SizedBox(
+                      height: 52,
+                      width: double.infinity,
+                      child: ElevatedButton.icon(
+                        onPressed: isLoading ? null : onSearch,
+                        icon: isLoading
+                            ? const SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: Colors.white,
+                                ),
+                              )
+                            : const Icon(Icons.search),
+                        label: Text(isLoading ? 'Buscando...' : 'Buscar'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Theme.of(context).primaryColor,
+                          foregroundColor: Colors.white,
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                      ),
+                    ),
+                ] else ...[
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: TextFormField(
+                          controller: cnpjController,
+                          inputFormatters: [cnpjFormatter],
+                          decoration: const InputDecoration(
+                            labelText: 'CNPJ',
+                            hintText: '00.000.000/0000-00',
+                            prefixIcon: Icon(Icons.business),
+                          ),
+                          keyboardType: TextInputType.number,
+                        ),
+                      ),
+                      const Gap(16),
+                      SizedBox(
+                        height: 56, // Matches default input height roughly
+                        child: ElevatedButton.icon(
+                          onPressed: isLoading ? null : onSearch,
+                          icon: isLoading
+                              ? const SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: Colors.white,
+                                  ),
+                                )
+                              : const Icon(Icons.search),
+                          label: Text(isLoading ? 'Buscando...' : 'Buscar'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Theme.of(context).primaryColor,
+                            foregroundColor: Colors.white,
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            padding: const EdgeInsets.symmetric(horizontal: 24),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+
+                const Gap(16),
+                ResponsiveRow(children: [
+                  TextFormField(
                     controller: nameController,
                     decoration: const InputDecoration(
                       labelText: 'Razão Social',
                       prefixIcon: Icon(Icons.badge),
                     ),
                   ),
-                ),
-                const Gap(16),
-                Expanded(
-                  child: TextFormField(
+                  TextFormField(
                     controller: tradeNameController,
                     decoration: const InputDecoration(
                       labelText: 'Nome Fantasia',
                       prefixIcon: Icon(Icons.store),
                     ),
                   ),
-                ),
-              ],
-            ),
-            const Gap(16),
-            Row(
-              children: [
-                Expanded(
-                  child: TextFormField(
+                ]),
+                const Gap(16),
+                ResponsiveRow(children: [
+                  TextFormField(
                     controller: emailController,
                     decoration: const InputDecoration(
                       labelText: 'E-mail',
@@ -404,10 +498,7 @@ class _RegistrationForm extends StatelessWidget {
                     ),
                     keyboardType: TextInputType.emailAddress,
                   ),
-                ),
-                const Gap(16),
-                Expanded(
-                  child: TextFormField(
+                  TextFormField(
                     controller: phoneController,
                     decoration: const InputDecoration(
                       labelText: 'Telefone',
@@ -415,119 +506,129 @@ class _RegistrationForm extends StatelessWidget {
                     ),
                     keyboardType: TextInputType.phone,
                   ),
-                ),
-              ],
-            ),
-            const Gap(32),
-            _SectionLabel('Endereço'),
-            const Gap(16),
-            Row(
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: TextFormField(
-                    controller: zipController,
-                    decoration: const InputDecoration(
-                      labelText: 'CEP',
-                      prefixIcon: Icon(Icons.map),
-                    ),
-                  ),
-                ),
+                ]),
+                const Gap(32),
+                _SectionLabel('Endereço'),
                 const Gap(16),
-                Expanded(
-                  flex: 3,
-                  child: TextFormField(
-                    controller: streetController,
-                    decoration: const InputDecoration(
-                      labelText: 'Logradouro',
-                      prefixIcon: Icon(Icons.location_on),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const Gap(16),
-            Row(
-              children: [
-                Expanded(
-                  child: TextFormField(
+                
+                // Address Grid
+                // Row 1: CEP + Street
+                LayoutBuilder(builder: (context, constraints) {
+                  if (constraints.maxWidth < 600) {
+                     return Column(
+                       children: [
+                         TextFormField(
+                            controller: zipController,
+                            decoration: const InputDecoration(
+                              labelText: 'CEP',
+                              prefixIcon: Icon(Icons.map),
+                            ),
+                          ),
+                          const Gap(16),
+                          TextFormField(
+                            controller: streetController,
+                            decoration: const InputDecoration(
+                              labelText: 'Logradouro',
+                              prefixIcon: Icon(Icons.location_on),
+                            ),
+                          ),
+                       ],
+                     );
+                  }
+                  return Row(
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: TextFormField(
+                          controller: zipController,
+                          decoration: const InputDecoration(
+                            labelText: 'CEP',
+                            prefixIcon: Icon(Icons.map),
+                          ),
+                        ),
+                      ),
+                      const Gap(16),
+                      Expanded(
+                        flex: 3,
+                        child: TextFormField(
+                          controller: streetController,
+                          decoration: const InputDecoration(
+                            labelText: 'Logradouro',
+                            prefixIcon: Icon(Icons.location_on),
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                }),
+                
+                const Gap(16),
+                ResponsiveRow(children: [
+                  TextFormField(
                     controller: numberController,
                     decoration: const InputDecoration(
                       labelText: 'Número',
                       prefixIcon: Icon(Icons.numbers),
                     ),
                   ),
-                ),
-                const Gap(16),
-                Expanded(
-                  child: TextFormField(
+                  TextFormField(
                     controller: complementController,
                     decoration: const InputDecoration(
                       labelText: 'Complemento',
                       prefixIcon: Icon(Icons.info_outline),
                     ),
                   ),
-                ),
-              ],
-            ),
-            const Gap(16),
-            Row(
-              children: [
-                Expanded(
-                  child: TextFormField(
+                ]),
+                const Gap(16),
+                ResponsiveRow(children: [
+                  TextFormField(
                     controller: districtController,
                     decoration: const InputDecoration(
                       labelText: 'Bairro',
                       prefixIcon: Icon(Icons.location_city),
                     ),
                   ),
-                ),
-                const Gap(16),
-                Expanded(
-                  child: TextFormField(
+                  TextFormField(
                     controller: cityController,
                     decoration: const InputDecoration(
                       labelText: 'Município',
                       prefixIcon: Icon(Icons.apartment),
                     ),
                   ),
-                ),
-                const Gap(16),
-                Expanded(
-                  child: TextFormField(
+                  TextFormField(
                     controller: stateController,
                     decoration: const InputDecoration(
                       labelText: 'UF',
                       prefixIcon: Icon(Icons.flag),
                     ),
                   ),
+                ]),
+                const Gap(32),
+                SizedBox(
+                  width: double.infinity,
+                  height: 56,
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).primaryColor,
+                      foregroundColor: Colors.white,
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      textStyle: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    child: const Text('Concluir Cadastro'),
+                  ),
                 ),
               ],
             ),
-            const Gap(32),
-            SizedBox(
-              width: double.infinity,
-              height: 56,
-              child: ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context).primaryColor,
-                  foregroundColor: Colors.white,
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  textStyle: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                child: const Text('Concluir Cadastro'),
-              ),
-            ),
-          ],
-        ),
-      ),
+          ),
+        );
+      }
     );
   }
 }

@@ -360,6 +360,7 @@ class _RegistrationForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
+        // Use the incoming constraints to determine layout mode
         final isMobile = constraints.maxWidth < 600;
         final cardPadding = isMobile ? 20.0 : 32.0;
 
@@ -384,7 +385,6 @@ class _RegistrationForm extends StatelessWidget {
                 _SectionLabel('Identificação da Empresa'),
                 const Gap(16),
                 
-                // Special layout for CNPJ + Search
                 if (isMobile) ...[
                    TextFormField(
                       controller: cnpjController,
@@ -442,7 +442,7 @@ class _RegistrationForm extends StatelessWidget {
                       ),
                       const Gap(16),
                       SizedBox(
-                        height: 56, // Matches default input height roughly
+                        height: 56,
                         child: ElevatedButton.icon(
                           onPressed: isLoading ? null : onSearch,
                           icon: isLoading
@@ -511,31 +511,28 @@ class _RegistrationForm extends StatelessWidget {
                 _SectionLabel('Endereço'),
                 const Gap(16),
                 
-                // Address Grid
-                // Row 1: CEP + Street
-                LayoutBuilder(builder: (context, constraints) {
-                  if (constraints.maxWidth < 600) {
-                     return Column(
-                       children: [
-                         TextFormField(
-                            controller: zipController,
-                            decoration: const InputDecoration(
-                              labelText: 'CEP',
-                              prefixIcon: Icon(Icons.map),
-                            ),
+                if (isMobile) ...[
+                   Column(
+                     children: [
+                       TextFormField(
+                          controller: zipController,
+                          decoration: const InputDecoration(
+                            labelText: 'CEP',
+                            prefixIcon: Icon(Icons.map),
                           ),
-                          const Gap(16),
-                          TextFormField(
-                            controller: streetController,
-                            decoration: const InputDecoration(
-                              labelText: 'Logradouro',
-                              prefixIcon: Icon(Icons.location_on),
-                            ),
+                        ),
+                        const Gap(16),
+                        TextFormField(
+                          controller: streetController,
+                          decoration: const InputDecoration(
+                            labelText: 'Logradouro',
+                            prefixIcon: Icon(Icons.location_on),
                           ),
-                       ],
-                     );
-                  }
-                  return Row(
+                        ),
+                     ],
+                   )
+                ] else ...[
+                  Row(
                     children: [
                       Expanded(
                         flex: 2,
@@ -559,8 +556,8 @@ class _RegistrationForm extends StatelessWidget {
                         ),
                       ),
                     ],
-                  );
-                }),
+                  )
+                ],
                 
                 const Gap(16),
                 ResponsiveRow(children: [

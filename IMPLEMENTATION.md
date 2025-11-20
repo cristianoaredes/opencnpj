@@ -9,6 +9,10 @@
     *   **Actions:** Created `lib/src/models/company.dart` with `Company`, `Phone`, and `Partner` classes, including `json_serializable` annotations and `Equatable`. Ran `dart run build_runner build --delete-conflicting-outputs`. Created `test/models_test.dart` with a sample JSON fixture and verification. Ran `dart test`, `dart fix --apply`, and `dart format .`.
     *   **Learnings/Surprises:** None beyond the initial `pubspec.yaml` issues.
     *   **Deviations:** None.
+*   **Phase 3:** Core Client Implementation.
+    *   **Actions:** Created `lib/src/exceptions/exceptions.dart` with custom exceptions. Created `lib/src/client.dart` implementing `IOpenCNPJ` and the `search` method, including input sanitization, HTTP requests, status code checking, and JSON decoding. Made `sanitizeCnpj` a static method to facilitate testing. Exported main classes in `lib/opencnpj.dart`. Created unit tests in `test/client_test.dart` using `mocktail` to mock `http.Client`. Ran `dart fix --apply`, `dart format .`, and `dart test` (all passed).
+    *   **Learnings/Surprises:** Realized `_sanitizeCnpj` as a private instance method was not directly testable; refactored it to a public static `sanitizeCnpj` method.
+    *   **Deviations:** Refactored the `_sanitizeCnpj` method during testing for better testability.
 
 ## Phase 1: Project Setup
 - [X] Create a pure Dart package using `dart create -t package .` (force to overwrite if needed, or handle manually if `dart create` complains about non-empty dir). *Note: Since we already `git init`ed, we might need to be careful. `dart create --force` might be needed or just manual setup.*
@@ -37,20 +41,20 @@
 - [X] Commit models.
 
 ## Phase 3: Core Client Implementation
-- [ ] Create `lib/src/exceptions/exceptions.dart` (`InvalidCNPJException`, `NotFoundException`, `OpenCNPJException`).
-- [ ] Create `lib/src/client.dart` implementing the `search` method.
+- [X] Create `lib/src/exceptions/exceptions.dart` (`InvalidCNPJException`, `NotFoundException`, `OpenCNPJException`).
+- [X] Create `lib/src/client.dart` implementing the `search` method.
     -   Implement input sanitization (regex to remove symbols).
     -   Implement HTTP GET request.
     -   Implement status code checking (200, 404, others).
     -   Implement JSON decoding and model mapping.
-- [ ] Export main classes in `lib/opencnpj.dart`.
-- [ ] Create unit tests in `test/client_test.dart` using `mocktail` to mock `http.Client`.
+- [X] Export main classes in `lib/opencnpj.dart`.
+- [X] Create unit tests in `test/client_test.dart` using `mocktail` to mock `http.Client`.
     -   Test success case.
     -   Test 404 case.
     -   Test invalid format case.
     -   Test server error case.
-- [ ] Run `dart fix` and `dart format`.
-- [ ] Commit client logic.
+- [X] Run `dart fix` and `dart format`.
+- [X] Commit client logic.
 
 ## Phase 4: Final Polish & Documentation
 - [ ] Create a working example in `example/main.dart` showing how to fetch a company.

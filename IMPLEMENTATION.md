@@ -17,6 +17,14 @@
     *   **Actions:** Created a working example in `example/main.dart`. Updated `README.md` with installation, usage, and supported fields. Created `GEMINI.md` with project context. Ran `dart analyze` (no issues), `dart test` (all passed), and verified `pubspec.yaml` metadata. Made final commit.
     *   **Learnings/Surprises:** None.
     *   **Deviations:** None.
+*   **Next Phase: Validação e Formatação de CNPJ.**
+    *   **Actions:** Adicionado `cpf_cnpj_validator` ao `pubspec.yaml`. Refatorado `lib/src/client.dart` para usar `CNPJValidator.strip` para sanitização e `CNPJValidator.isValid` para validação, e adicionado `OpenCNPJ.formatCnpj` usando `CNPJValidator.format`. Atualizado `test/client_test.dart` para refletir a nova validação e os testes de formatação. Executado `dart fix`, `dart format`, `dart test` (todos passaram).
+    *   **Learnings/Surprises:** A implementação manual inicial de `isValid` estava incorreta, levando à decisão de usar uma biblioteca externa (`cpf_cnpj_validator`) para robustez. O pacote `cpf_cnpj_validator` introduziu dependências do Flutter e advertências de versão, mas os testes passaram após a integração.
+    *   **Deviations:** Substituí a implementação manual de `isValid` e `sanitizeCnpj` pela biblioteca `cpf_cnpj_validator` para garantir a correção e reduzir a complexidade.
+*   **Verificação Final para a Próxima Release.**
+    *   **Actions:** Executado `dart analyze` (no issues), `dart test` (all passed). Atualizado `CHANGELOG.md` com as novas features. Atualizado `pubspec.yaml` para a versão `0.2.0`. Commitado a release `0.2.0`.
+    *   **Learnings/Surprises:** N/A.
+    *   **Deviations:** N/A.
 
 ## Phase 1: Project Setup
 - [X] Create a pure Dart package using `dart create -t package .` (force to overwrite if needed, or handle manually if `dart create` complains about non-empty dir). *Note: Since we already `git init`ed, we might need to be careful. `dart create --force` might be needed or just manual setup.*
@@ -41,7 +49,7 @@
     -   *Correction*: Let's map 1:1 to the API response for the DTOs to avoid complexity in serialization.
 - [X] Run `dart run build_runner build --delete-conflicting-outputs` to generate `*.g.dart` files.
 - [X] Create unit tests in `test/models_test.dart` to verify JSON decoding against a sample fixture.
-- [X] Run `dart fix` and `dart format`.
+- [X] Run `dart fix` e `dart format`.
 - [X] Commit models.
 
 ## Phase 3: Core Client Implementation
@@ -57,7 +65,7 @@
     -   Test 404 case.
     -   Test invalid format case.
     -   Test server error case.
-- [X] Run `dart fix` and `dart format`.
+- [X] Run `dart fix` e `dart format`.
 - [X] Commit client logic.
 
 ## Phase 4: Final Polish & Documentation
@@ -66,9 +74,38 @@
     -   Installation instructions.
     -   Usage example.
     -   Supported fields summary.
-- [X] Create `GEMINI.md` with project context.
+- [X] Create `GEMINI.md` com o contexto do projeto.
 - [X] Run `dart analyze` to ensure no lint errors.
 - [X] Run all tests `dart test`.
 - [X] Verify `pubspec.yaml` metadata.
 - [X] Final commit.
-- [ ] Ask user for final review.
+
+## Próxima Fase: Validação e Formatação de CNPJ
+- [X] Adicionar um método estático `bool isValid(String cnpj)` à classe `OpenCNPJ` (ou uma nova classe `CnpjUtils`).
+    -   Este método deve sanitizar o CNPJ de entrada e então aplicar a lógica de validação de dígitos verificadores (DV1 e DV2).
+    -   Retornar `true` se o CNPJ for válido, `false` caso contrário.
+- [X] Integrar a validação no método `search` do `OpenCNPJ` (antes da chamada HTTP).
+    -   Se `OpenCNPJ.isValid(sanitizedCnpj)` retornar `false`, lançar `InvalidCNPJException` com uma mensagem mais específica.
+- [X] Criar/modificar unit tests em `test/client_test.dart` (ou um novo `test/cnpj_utils_test.dart`) para o método `isValid`.
+    -   Testar CNPJs válidos e inválidos.
+    -   Testar o comportamento do `search` com CNPJs válidos e inválidos localmente.
+- [X] Adicionar um método estático `String formatCnpj(String cnpj)` à classe `OpenCNPJ` (ou `CnpjUtils`).
+    -   Este método deve receber um CNPJ sanitizado (apenas números) de 14 dígitos.
+    -   Aplicar a máscara `XX.XXX.XXX/XXXX-XX`.
+    -   Lançar `FormatException` ou `ArgumentError` se o CNPJ de entrada não tiver 14 dígitos.
+- [ ] (Opcional, mas útil) Adicionar um método getter `String get formattedCnpj` ao modelo `Company`.
+    -   Internamente, ele chamaria `OpenCNPJ.formatCnpj(this.cnpj)`.
+- [X] Criar/modificar unit tests em `test/client_test.dart` (ou `test/cnpj_utils_test.dart`) para o método `formatCnpj`.
+    -   Testar a formatação de CNPJs válidos.
+    -   Testar o lançamento de exceção para CNPJs com comprimento incorreto.
+- [X] Atualizar o `example/main.dart` para demonstrar o uso da formatação.
+- [X] Atualizar o `README.md` para incluir a nova funcionalidade de formatação.
+- [X] Executar `dart fix` e `dart format`.
+- [X] Commitar as alterações.
+
+### Verificação Final para a Próxima Release:
+- [X] Executar `dart analyze` para garantir que não há erros de lint.
+- [X] Executar todos os testes `dart test`.
+- [X] Atualizar `CHANGELOG.md` com as novas features.
+- [X] Atualizar `pubspec.yaml` para a versão `0.2.0`.
+- [ ] Commit final da release `0.2.0`.

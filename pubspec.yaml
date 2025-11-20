@@ -1,6 +1,6 @@
 name: opencnpj
 description: A Dart client library for the OpenCNPJ API.
-version: 0.1.0
+version: 0.2.0
 repository: https://github.com/cristianocosta/opencnpj
 
 environment:

@@ -10,7 +10,8 @@ void main() async {
     print('Searching for CNPJ: $cnpj');
     final company = await opencnpj.search(cnpj);
     print('Company Found: ${company.razaoSocial}');
-    print('CNPJ: ${company.cnpj}');
+    print('CNPJ (raw): ${company.cnpj}');
+    print('CNPJ (formatted): ${OpenCNPJ.formatCnpj(company.cnpj)}');
     print('Status: ${company.situacaoCadastral}');
     if (company.email != null) {
       print('Email: ${company.email}');

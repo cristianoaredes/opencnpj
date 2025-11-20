@@ -51,6 +51,39 @@ void main() {
       expect(company.razaoSocial, 'GOOGLE BRASIL INTERNET LTDA.');
     });
 
+    test('search handles null lists gracefully', () async {
+      final jsonResponse = {
+        "cnpj": "06990590000123",
+        "razao_social": "GOOGLE BRASIL INTERNET LTDA.",
+        "situacao_cadastral": "ATIVA",
+        "data_situacao_cadastral": "2005-07-26",
+        "matriz_filial": "MATRIZ",
+        "data_inicio_atividade": "2005-07-26",
+        "cnae_principal": "6319400",
+        "cnaes_secundarios": null,
+        "natureza_juridica": "SOCIEDADE EMPRESARIA LIMITADA",
+        "logradouro": "AV BRIG FARIA LIMA",
+        "numero": "3477",
+        "bairro": "ITAIM BIBI",
+        "cep": "04538133",
+        "uf": "SP",
+        "municipio": "SAO PAULO",
+        "telefones": null,
+        "capital_social": "1.000.000,00",
+        "porte_empresa": "DEMAIS",
+        "qsa": null,
+      };
+
+      when(
+        () => mockClient.get(any()),
+      ).thenAnswer((_) async => http.Response(json.encode(jsonResponse), 200));
+
+      final company = await openCnpj.search('06.990.590/0001-23');
+      expect(company.cnaesSecundarios, isEmpty);
+      expect(company.telefones, isEmpty);
+      expect(company.qsa, isEmpty);
+    });
+
     test('search throws InvalidCNPJException for invalid CNPJ', () async {
       // Using an invalid CNPJ that CNPJValidator would fail
       expect(

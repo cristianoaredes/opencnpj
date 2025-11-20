@@ -15,9 +15,11 @@ Company _$CompanyFromJson(Map<String, dynamic> json) => Company(
   matrizFilial: json['matriz_filial'] as String,
   dataInicioAtividade: json['data_inicio_atividade'] as String,
   cnaePrincipal: json['cnae_principal'] as String,
-  cnaesSecundarios: (json['cnaes_secundarios'] as List<dynamic>)
-      .map((e) => e as String)
-      .toList(),
+  cnaesSecundarios:
+      (json['cnaes_secundarios'] as List<dynamic>?)
+          ?.map((e) => e as String)
+          .toList() ??
+      [],
   naturezaJuridica: json['natureza_juridica'] as String,
   logradouro: json['logradouro'] as String,
   numero: json['numero'] as String,
@@ -27,18 +29,22 @@ Company _$CompanyFromJson(Map<String, dynamic> json) => Company(
   uf: json['uf'] as String,
   municipio: json['municipio'] as String,
   email: json['email'] as String?,
-  telefones: (json['telefones'] as List<dynamic>)
-      .map((e) => Phone.fromJson(e as Map<String, dynamic>))
-      .toList(),
+  telefones:
+      (json['telefones'] as List<dynamic>?)
+          ?.map((e) => Phone.fromJson(e as Map<String, dynamic>))
+          .toList() ??
+      [],
   capitalSocial: json['capital_social'] as String,
   porteEmpresa: json['porte_empresa'] as String,
   opcaoSimples: json['opcao_simples'] as String?,
   dataOpcaoSimples: json['data_opcao_simples'] as String?,
   opcaoMei: json['opcao_mei'] as String?,
   dataOpcaoMei: json['data_opcao_mei'] as String?,
-  qsa: (json['qsa'] as List<dynamic>)
-      .map((e) => Partner.fromJson(e as Map<String, dynamic>))
-      .toList(),
+  qsa:
+      (json['qsa'] as List<dynamic>?)
+          ?.map((e) => Partner.fromJson(e as Map<String, dynamic>))
+          .toList() ??
+      [],
 );
 
 Map<String, dynamic> _$CompanyToJson(Company instance) => <String, dynamic>{

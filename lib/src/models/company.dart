@@ -13,6 +13,7 @@ class Company extends Equatable {
   final String matrizFilial;
   final String dataInicioAtividade;
   final String cnaePrincipal;
+  @JsonKey(defaultValue: [])
   final List<String> cnaesSecundarios;
   final String naturezaJuridica;
   final String logradouro;
@@ -23,6 +24,7 @@ class Company extends Equatable {
   final String uf;
   final String municipio;
   final String? email;
+  @JsonKey(defaultValue: [])
   final List<Phone> telefones;
   final String capitalSocial;
   final String porteEmpresa;
@@ -30,6 +32,7 @@ class Company extends Equatable {
   final String? dataOpcaoSimples;
   final String? opcaoMei;
   final String? dataOpcaoMei;
+  @JsonKey(defaultValue: [])
   final List<Partner> qsa;
 
   const Company({

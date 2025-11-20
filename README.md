@@ -1,3 +1,5 @@
+![OpenCNPJ Banner](banner.jpeg)
+
 # OpenCNPJ Dart Client
 
 [![Pub Version](https://img.shields.io/pub/v/opencnpj?logo=dart)](https://pub.dev/packages/opencnpj)
@@ -137,7 +139,7 @@ The `Company` model maps 1:1 with the OpenCNPJ response. Key fields include:
 *   **Rate Limit:** The official API allows **50 requests per second per IP**.
 *   **Data Source:** Receita Federal (Brazilian Federal Revenue).
 *   **Update Frequency:** Monthly. Data may not reflect real-time changes (e.g., a company opened yesterday).
-*   **Offline/Static:** The API serves static files; if a CNPJ isn't in the monthly dump, it returns 404.
+*   **Offline/Static:** The API serves static files; if a CNPJ isn\'t in the monthly dump, it returns 404.
 
 ---
 

@@ -45,6 +45,12 @@ class OpenCNPJ implements IOpenCNPJ {
         );
       }
     } on http.ClientException catch (e) {
+      // Check for specific media type error
+      if (e.message.contains('Invalid media type')) {
+        throw OpenCNPJException(
+          'API Response Error: The server returned an invalid Content-Type header. This is a known issue with some Flutter Web environments. Details: ${e.message}',
+        );
+      }
       throw OpenCNPJException('Network error: ${e.message}');
     } catch (e) {
       rethrow;

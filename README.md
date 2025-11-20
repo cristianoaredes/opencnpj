@@ -10,6 +10,8 @@
 An **unofficial**, robust, and pure Dart client library for the [OpenCNPJ API](https://opencnpj.org/).
 Easily query, validate, and format Brazilian company data (CNPJ) in your Dart and Flutter applications.
 
+[🇧🇷 Leia em Português](README.pt-br.md)
+
 ---
 
 ## 📋 Table of Contents

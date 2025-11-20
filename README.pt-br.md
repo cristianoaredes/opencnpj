@@ -24,6 +24,7 @@ Consulte, valide e formate dados de empresas brasileiras (CNPJ) facilmente em su
     -   [Formatação](#formatação)
 -   [Campos Suportados](#-campos-suportados)
 -   [Limitações da API e Fonte de Dados](#-limitações-da-api-e-fonte-de-dados)
+-   [Autor](#-autor)
 -   [Contribuindo](#-contribuindo)
 -   [Aviso Legal](#-aviso-legal)
 -   [Licença](#-licença)
@@ -142,6 +143,27 @@ O modelo `Company` mapeia 1:1 com a resposta do OpenCNPJ. Os campos principais i
 *   **Fonte de Dados:** Receita Federal do Brasil.
 *   **Frequência de Atualização:** Mensal. Os dados podem não refletir mudanças em tempo real (ex: uma empresa aberta ontem).
 *   **Offline/Estático:** A API serve arquivos estáticos; se um CNPJ não estiver no dump mensal, retornará 404.
+
+---
+
+## 👨‍💻 Autor
+
+**Cristiano Arêdes Costa**
+Engenheiro de Software Sênior especializado em Flutter, Dart e desenvolvimento mobile com mais de 15 anos de experiência.
+
+- 🌐 Portfolio: [aredes.me](https://aredes.me)
+- 💼 LinkedIn: [linkedin.com/in/cristianoaredes](https://www.linkedin.com/in/cristianoaredes)
+- 📧 Email: cristianoaredes@icloud.com
+
+### Outros Projetos Open Source
+
+Confira minhas outras contribuições open-source:
+
+- **[MCP DadosBR](https://github.com/crisaredes/mcp-dadosbr)** - Servidor Model Context Protocol para dados públicos brasileiros (validação CNPJ/CEP, busca Tavily) com mais de 62 ferramentas
+- **[MCP Câmara](https://github.com/crisaredes/mcp-camara)** - Servidor MCP para dados legislativos da Câmara dos Deputados com mais de 62 ferramentas para projetos de lei, deputados e votações
+- **[Super-App Flutter Sample](https://github.com/crisaredes/super-app-flutter)** - Exemplo de arquitetura modular Flutter com GoRouter, GetIt e padrão BLoC
+- **[MCP Mobile Server](https://github.com/crisaredes/mcp-mobile)** - Automação de build Android/iOS/Flutter e ferramentas de CI/CD via MCP
+- **[AnythingToLLMs.txt](https://github.com/crisaredes/anything-to-llms)** - Conversor universal de documentos para processamento LLM
 
 ---
 

@@ -24,6 +24,7 @@ Easily query, validate, and format Brazilian company data (CNPJ) in your Dart an
     -   [Formatting](#formatting)
 -   [Supported Fields](#-supported-fields)
 -   [API Limitations](#-api-limitations--data-source)
+-   [Author](#-author)
 -   [Contributing](#-contributing)
 -   [Disclaimer](#-disclaimer)
 -   [License](#-license)
@@ -142,6 +143,27 @@ The `Company` model maps 1:1 with the OpenCNPJ response. Key fields include:
 *   **Data Source:** Receita Federal (Brazilian Federal Revenue).
 *   **Update Frequency:** Monthly. Data may not reflect real-time changes (e.g., a company opened yesterday).
 *   **Offline/Static:** The API serves static files; if a CNPJ isn\'t in the monthly dump, it returns 404.
+
+---
+
+## 👨‍💻 Author
+
+**Cristiano Arêdes Costa**
+Senior Software Engineer specializing in Flutter, Dart, and mobile development with 15+ years of experience.
+
+- 🌐 Portfolio: [aredes.me](https://aredes.me)
+- 💼 LinkedIn: [linkedin.com/in/cristianoaredes](https://www.linkedin.com/in/cristianoaredes)
+- 📧 Email: cristianoaredes@icloud.com
+
+### Other Open Source Projects
+
+Check out my other open-source contributions:
+
+- **[MCP DadosBR](https://github.com/crisaredes/mcp-dadosbr)** - Model Context Protocol server for Brazilian public data (CNPJ/CEP validation, Tavily search) with 62+ tools
+- **[MCP Câmara](https://github.com/crisaredes/mcp-camara)** - MCP server for Brazilian Chamber of Deputies legislative data with 62+ tools for bills, deputies, and votes
+- **[Super-App Flutter Sample](https://github.com/crisaredes/super-app-flutter)** - Modular Flutter architecture example with GoRouter, GetIt, and BLoC pattern
+- **[MCP Mobile Server](https://github.com/crisaredes/mcp-mobile)** - Android/iOS/Flutter build automation and CI/CD tooling via MCP
+- **[AnythingToLLMs.txt](https://github.com/crisaredes/anything-to-llms)** - Universal document converter for LLM processing
 
 ---
 

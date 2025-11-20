@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'OpenCNPJ Register Example',
+      title: 'Exemplo de Cadastro OpenCNPJ',
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(
@@ -88,7 +88,7 @@ class _RegisterPageState extends State<RegisterPage> {
     final cnpj = _cnpjFormatter.getUnmaskedText();
     if (cnpj.length != 14) {
       setState(() {
-        _errorMessage = 'Please enter a valid 14-digit CNPJ.';
+        _errorMessage = 'Por favor, insira um CNPJ válido com 14 dígitos.';
       });
       return;
     }
@@ -103,15 +103,15 @@ class _RegisterPageState extends State<RegisterPage> {
       _populateFields(company);
     } on NotFoundException {
       setState(() {
-        _errorMessage = 'Company not found.';
+        _errorMessage = 'Empresa não encontrada.';
       });
     } on InvalidCNPJException {
       setState(() {
-        _errorMessage = 'Invalid CNPJ format.';
+        _errorMessage = 'Formato de CNPJ inválido.';
       });
     } catch (e) {
       setState(() {
-        _errorMessage = 'An error occurred: $e';
+        _errorMessage = 'Ocorreu um erro: $e';
       });
     } finally {
       setState(() {
@@ -213,7 +213,7 @@ class _Header extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Create Account',
+          'Criar Conta',
           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                 fontWeight: FontWeight.w800,
                 color: const Color(0xFF1A1A1A),
@@ -221,7 +221,7 @@ class _Header extends StatelessWidget {
         ),
         const Gap(8),
         Text(
-          'Enter your company details below. Use the CNPJ search to auto-fill.',
+          'Insira os dados da sua empresa abaixo. Use a busca por CNPJ para preenchimento automático.',
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                 color: Colors.grey[600],
               ),
@@ -321,7 +321,7 @@ class _RegistrationForm extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _SectionLabel('Company Identification'),
+            _SectionLabel('Identificação da Empresa'),
             const Gap(16),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -354,7 +354,7 @@ class _RegistrationForm extends StatelessWidget {
                             ),
                           )
                         : const Icon(Icons.search),
-                    label: Text(isLoading ? 'Searching...' : 'Search'),
+                    label: Text(isLoading ? 'Buscando...' : 'Buscar'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Theme.of(context).primaryColor,
                       foregroundColor: Colors.white,
@@ -375,7 +375,7 @@ class _RegistrationForm extends StatelessWidget {
                   child: TextFormField(
                     controller: nameController,
                     decoration: const InputDecoration(
-                      labelText: 'Company Name (Razão Social)',
+                      labelText: 'Razão Social',
                       prefixIcon: Icon(Icons.badge),
                     ),
                   ),
@@ -385,7 +385,7 @@ class _RegistrationForm extends StatelessWidget {
                   child: TextFormField(
                     controller: tradeNameController,
                     decoration: const InputDecoration(
-                      labelText: 'Trading Name (Nome Fantasia)',
+                      labelText: 'Nome Fantasia',
                       prefixIcon: Icon(Icons.store),
                     ),
                   ),
@@ -399,7 +399,7 @@ class _RegistrationForm extends StatelessWidget {
                   child: TextFormField(
                     controller: emailController,
                     decoration: const InputDecoration(
-                      labelText: 'Email',
+                      labelText: 'E-mail',
                       prefixIcon: Icon(Icons.email),
                     ),
                     keyboardType: TextInputType.emailAddress,
@@ -410,7 +410,7 @@ class _RegistrationForm extends StatelessWidget {
                   child: TextFormField(
                     controller: phoneController,
                     decoration: const InputDecoration(
-                      labelText: 'Phone',
+                      labelText: 'Telefone',
                       prefixIcon: Icon(Icons.phone),
                     ),
                     keyboardType: TextInputType.phone,
@@ -419,7 +419,7 @@ class _RegistrationForm extends StatelessWidget {
               ],
             ),
             const Gap(32),
-            _SectionLabel('Address Details'),
+            _SectionLabel('Endereço'),
             const Gap(16),
             Row(
               children: [
@@ -428,7 +428,7 @@ class _RegistrationForm extends StatelessWidget {
                   child: TextFormField(
                     controller: zipController,
                     decoration: const InputDecoration(
-                      labelText: 'ZIP Code (CEP)',
+                      labelText: 'CEP',
                       prefixIcon: Icon(Icons.map),
                     ),
                   ),
@@ -439,7 +439,7 @@ class _RegistrationForm extends StatelessWidget {
                   child: TextFormField(
                     controller: streetController,
                     decoration: const InputDecoration(
-                      labelText: 'Street',
+                      labelText: 'Logradouro',
                       prefixIcon: Icon(Icons.location_on),
                     ),
                   ),
@@ -453,7 +453,7 @@ class _RegistrationForm extends StatelessWidget {
                   child: TextFormField(
                     controller: numberController,
                     decoration: const InputDecoration(
-                      labelText: 'Number',
+                      labelText: 'Número',
                       prefixIcon: Icon(Icons.numbers),
                     ),
                   ),
@@ -463,7 +463,7 @@ class _RegistrationForm extends StatelessWidget {
                   child: TextFormField(
                     controller: complementController,
                     decoration: const InputDecoration(
-                      labelText: 'Complement',
+                      labelText: 'Complemento',
                       prefixIcon: Icon(Icons.info_outline),
                     ),
                   ),
@@ -477,7 +477,7 @@ class _RegistrationForm extends StatelessWidget {
                   child: TextFormField(
                     controller: districtController,
                     decoration: const InputDecoration(
-                      labelText: 'District/Neighborhood',
+                      labelText: 'Bairro',
                       prefixIcon: Icon(Icons.location_city),
                     ),
                   ),
@@ -487,7 +487,7 @@ class _RegistrationForm extends StatelessWidget {
                   child: TextFormField(
                     controller: cityController,
                     decoration: const InputDecoration(
-                      labelText: 'City',
+                      labelText: 'Município',
                       prefixIcon: Icon(Icons.apartment),
                     ),
                   ),
@@ -497,7 +497,7 @@ class _RegistrationForm extends StatelessWidget {
                   child: TextFormField(
                     controller: stateController,
                     decoration: const InputDecoration(
-                      labelText: 'State',
+                      labelText: 'UF',
                       prefixIcon: Icon(Icons.flag),
                     ),
                   ),
@@ -522,7 +522,7 @@ class _RegistrationForm extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                child: const Text('Complete Registration'),
+                child: const Text('Concluir Cadastro'),
               ),
             ),
           ],

@@ -34,7 +34,11 @@ class OpenCNPJ implements IOpenCNPJ {
       final response = await _httpClient.get(uri);
 
       if (response.statusCode == 200) {
-        final Map<String, dynamic> jsonResponse = json.decode(response.body);
+        // Use bodyBytes and utf8.decode to avoid issues with malformed Content-Type headers
+        // (e.g. "application/json, application/json; charset=UTF-8") which cause response.body to crash
+        final Map<String, dynamic> jsonResponse = json.decode(
+          utf8.decode(response.bodyBytes),
+        );
         return Company.fromJson(jsonResponse);
       } else if (response.statusCode == 404) {
         throw const NotFoundException('Company not found for the given CNPJ.');
@@ -45,12 +49,6 @@ class OpenCNPJ implements IOpenCNPJ {
         );
       }
     } on http.ClientException catch (e) {
-      // Check for specific media type error
-      if (e.message.contains('Invalid media type')) {
-        throw OpenCNPJException(
-          'API Response Error: The server returned an invalid Content-Type header. This is a known issue with some Flutter Web environments. Details: ${e.message}',
-        );
-      }
       throw OpenCNPJException('Network error: ${e.message}');
     } catch (e) {
       rethrow;

@@ -135,7 +135,9 @@ Uma aplicação web responsiva, mobile-first, que preenche automaticamente formu
     cd example/flutter_example
     flutter run -d chrome
     ```
--   **Demo:** [Assista ao vídeo de demonstração](assets/exemplo_cnpj.mov)
+-   **Demo:**
+
+    ![Demo](assets/exemplo_cnpj.gif)
 
 ### Exemplo Servidor Shelf
 

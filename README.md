@@ -135,7 +135,9 @@ A responsive, mobile-first web application that auto-fills company registration 
     cd example/flutter_example
     flutter run -d chrome
     ```
--   **Demo:** [Watch the demo video](assets/exemplo_cnpj.mov)
+-   **Demo:**
+
+    ![Demo](assets/exemplo_cnpj.gif)
 
 ### Shelf Server Example
 

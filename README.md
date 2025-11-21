@@ -1,4 +1,4 @@
-![OpenCNPJ Banner](banner.jpeg)
+![OpenCNPJ Banner](assets/banner.jpeg)
 
 # OpenCNPJ Dart Client
 
@@ -22,7 +22,133 @@ Easily query, validate, and format Brazilian company data (CNPJ) in your Dart an
     -   [Basic Query](#basic-query)
     -   [Validation](#validation)
     -   [Formatting](#formatting)
+-   [Examples](#-examples)
 -   [Supported Fields](#-supported-fields)
+-   [API Limitations](#-api-limitations--data-source)
+-   [Author](#-author)
+-   [Contributing](#-contributing)
+-   [Disclaimer](#-disclaimer)
+-   [License](#-license)
+
+---
+
+## ✨ Features
+
+*   🚀 **Easy to Use:** Simple, async API to fetch company details.
+*   🛡️ **Robust Validation:** Validate CNPJ format and check digits locally *before* hitting the API.
+*   🎨 **Formatting:** Built-in utilities to format CNPJs (`XX.XXX.XXX/XXXX-XX`).
+*   📦 **Strongly Typed:** Full support for all OpenCNPJ fields, including Partners (`QSA`) and CNAEs.
+*   ⚡ **Performance:** Zero-dependency on Flutter (runs on server, CLI, and web).
+*   🔒 **Safety:** Input sanitization and specific exceptions for predictable error handling.
+
+---
+
+## 📦 Installation
+
+Add this to your `pubspec.yaml`:
+
+```yaml
+dependencies:
+  opencnpj: ^0.2.0
+```
+
+Or run:
+
+```bash
+dart pub add opencnpj
+```
+
+---
+
+## 💻 Usage
+
+### Basic Query
+
+Import the package and instantiate the client. You can fetch company data using a formatted or unformatted CNPJ string.
+
+```dart
+import 'package:opencnpj/opencnpj.dart';
+
+void main() async {
+  final client = OpenCNPJ();
+
+  try {
+    // Fetch company data
+    final company = await client.search('06.990.590/0001-23');
+
+    print('🏢 Company: ${company.razaoSocial}');
+    print('📍 State: ${company.uf}');
+    print('💼 Status: ${company.situacaoCadastral}');
+    
+    // Access nested data (Partners/QSA)
+    if (company.qsa.isNotEmpty) {
+      print('👥 Partners:');
+      for (final partner in company.qsa) {
+        print('   - ${partner.nomeSocio} (${partner.qualificacaoSocio})');
+      }
+    }
+  } on NotFoundException {
+    print('❌ Company not found.');
+  } on InvalidCNPJException {
+    print('❌ Invalid CNPJ format.');
+  } catch (e) {
+    print('❌ Error: $e');
+  }
+}
+```
+
+### Validation
+
+Validate a CNPJ locally to avoid unnecessary API calls. Uses strict mathematical validation (check digits).
+
+```dart
+import 'package:cpf_cnpj_validator/cnpj_validator.dart';
+
+bool isValid = CNPJValidator.isValid('06.990.590/0001-23'); // true
+bool isInvalid = CNPJValidator.isValid('11.111.111/1111-11'); // false
+```
+
+### Formatting
+
+Format a raw CNPJ string for display in your UI.
+
+```dart
+import 'package:opencnpj/opencnpj.dart';
+
+String formatted = OpenCNPJ.formatCnpj('06990590000123');
+print(formatted); // 06.990.590/0001-23
+```
+
+---
+
+## 📱 Examples
+
+This repository includes fully functional examples to help you get started:
+
+### Flutter Web Example
+
+A responsive, mobile-first web application that auto-fills company registration forms using CNPJ search.
+
+-   **Source:** `example/flutter_example`
+-   **Run:**
+    ```bash
+    cd example/flutter_example
+    flutter run -d chrome
+    ```
+-   **Demo:** [Watch the demo video](assets/exemplo_cnpj.mov)
+
+### Shelf Server Example
+
+A backend REST API built with Dart Shelf that proxies requests to OpenCNPJ and implements a CRUD for widgets.
+
+-   **Source:** `example/server`
+-   **Run:**
+    ```bash
+    cd example/server
+    dart run bin/server.dart
+    ```
+
+---
 -   [API Limitations](#-api-limitations--data-source)
 -   [Author](#-author)
 -   [Contributing](#-contributing)

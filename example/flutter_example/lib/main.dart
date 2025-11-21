@@ -85,6 +85,38 @@ class _RegisterPageState extends State<RegisterPage> {
   String? _errorMessage;
   final _openCnpj = OpenCNPJ();
 
+  @override
+  void initState() {
+    super.initState();
+    _cnpjController.addListener(_onCnpjChanged);
+  }
+
+  void _onCnpjChanged() {
+    final unmasked = _cnpjFormatter.getUnmaskedText();
+    if (unmasked.isEmpty) {
+      _clearFields();
+      if (_errorMessage != null) {
+        setState(() {
+          _errorMessage = null;
+        });
+      }
+    }
+  }
+
+  void _clearFields() {
+    _nameController.clear();
+    _tradeNameController.clear();
+    _emailController.clear();
+    _phoneController.clear();
+    _streetController.clear();
+    _numberController.clear();
+    _complementController.clear();
+    _districtController.clear();
+    _cityController.clear();
+    _stateController.clear();
+    _zipController.clear();
+  }
+
   Future<void> _searchCnpj() async {
     final cnpj = _cnpjFormatter.getUnmaskedText();
     if (cnpj.length != 14) {

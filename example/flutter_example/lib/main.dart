@@ -93,8 +93,13 @@ class _RegisterPageState extends State<RegisterPage> {
 
   void _onCnpjChanged() {
     final unmasked = _cnpjFormatter.getUnmaskedText();
+    
+    // Se o CNPJ estiver completo (14 dígitos) e não estiver carregando, busca automaticamente
+    if (unmasked.length == 14 && !_isLoading) {
+      _searchCnpj();
+    }
     // Limpa os campos se o CNPJ tiver 12 ou menos dígitos (usuário apagou pelo menos 2 caracteres do total de 14)
-    if (unmasked.length <= 12) {
+    else if (unmasked.length <= 12) {
       _clearFields();
       if (_errorMessage != null) {
         setState(() {
